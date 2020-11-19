@@ -3,6 +3,8 @@ import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3'))
+
+const CHEF_ADDR = '0x143033f2587476662D098ccBa8ef68A5C4baD581'
 const UNIT = new BigNumber('1000000000000000000')
 const REWARD_PER_BLOCK = UNIT.multipliedBy(new BigNumber('30'))
 const TOTAL_ALLOC_POINT = new BigNumber(14)
@@ -13,14 +15,8 @@ export default async function (pool, addr, blockNumber) {
     const address = addr.toLowerCase()
     const transactions = await getTransactions()
     const pools = getPools()
-    let blocksProcessed = new Set()
-
-    let users = new Map()
-    users.set(0, new Map())
-    users.set(1, new Map())
-    users.set(2, new Map())
-    users.set(3, new Map())
-    users.set(4, new Map())
+    const users = getUsers()
+    const blocksProcessed = new Set()
 
     transactions.forEach((transaction) =>
       processDeposit(transaction, pools, users, blocksProcessed)
@@ -33,20 +29,14 @@ export default async function (pool, addr, blockNumber) {
   return -1
 }
 
-function objectToQuerystring(params) {
-  return Object.keys(params)
-    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-    .join('&')
-}
-
 async function getTransactions() {
   const params = {
     module: 'account',
     action: 'txlist',
-    address: '0x143033f2587476662d098ccba8ef68a5c4bad581',
+    address: CHEF_ADDR,
     startblock: '11194181',
     endblock: '999999999',
-    to: '0x143033f2587476662d098ccba8ef68a5c4bad581',
+    to: CHEF_ADDR,
     sort: 'asc',
     apikey: process.env.ETHERSCAN_API,
   }
@@ -100,6 +90,18 @@ function getPools() {
   })
 
   return pools
+}
+
+function getUsers() {
+  const users = new Map()
+
+  users.set(0, new Map())
+  users.set(1, new Map())
+  users.set(2, new Map())
+  users.set(3, new Map())
+  users.set(4, new Map())
+
+  return users
 }
 
 function parsePid(input) {
@@ -220,4 +222,10 @@ function processDeposit(transaction, pools, users, blocksProcessed) {
   pools.set(pool.id, pool)
   users.set(user.address, user)
   blocksProcessed.add(hash)
+}
+
+function objectToQuerystring(params) {
+  return Object.keys(params)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    .join('&')
 }
