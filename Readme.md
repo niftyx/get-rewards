@@ -1,5 +1,7 @@
 # Get GSWAP Rewards
 
+This repo contains the logic used for calculating the GSWAP farming rewards. 
+
 ## Prerequisites
 
 - Install NodeJS ≥ 10.22.0
