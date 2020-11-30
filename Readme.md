@@ -9,8 +9,8 @@
 
 1. Install NodeJS 10.22.0 / NPM
 2. Run `npm i`
-3. Add you infura API Key to `.env`
-4. Open `index.js` and set the pool ID for the corresponding pool in `POOL`, and your wallet address in `ADDRESS`. Pools IDs:
+3. Add your infura API Key to `.env`
+4. Open `index.js` and set the pool ID for the corresponding pool in `POOL`, and your wallet address in `ADDRESS`. Pool IDs:
 
    - GSWAP-ETH: 0
    - GSWAP-SHROOM: 1
