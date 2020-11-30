@@ -37,8 +37,7 @@ async function getTransactions() {
     startblock: '11194181',
     endblock: '999999999',
     to: CHEF_ADDR,
-    sort: 'asc',
-    apikey: process.env.ETHERSCAN_API_KEY,
+    sort: 'asc'
   }
 
   const response = await fetch('https://api.etherscan.io/api?' + objectToQuerystring(params))
